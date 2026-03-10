@@ -1,6 +1,7 @@
+use crate::{build_button, build_label, build_layout, GuiState};
+use gtk::prelude::{BoxExt, ButtonExt, GtkWindowExt};
 use std::cell::RefCell;
 use std::rc::Rc;
-use gtk::Label;
 
 #[derive(Debug)]
 pub struct AppState {
@@ -8,7 +9,6 @@ pub struct AppState {
 }
 
 impl AppState {
-
     pub fn new() -> AppState {
         AppState {
             count: 0
@@ -23,12 +23,12 @@ pub enum Event {
     Decrement,
 }
 
-pub fn dispatch(app_state: Rc<RefCell<AppState>>, event: Event, label: Rc<RefCell<Label>>) {
-    update(&mut app_state.borrow_mut(), &event);
-    render(&app_state.borrow(), label.clone());
+pub fn dispatch(gui_state: Rc<RefCell<GuiState>>, app_state: Rc<RefCell<AppState>>, event: Event) {
+    update_app_state(&mut app_state.borrow_mut(), &event);
+    update_gui_state(gui_state, app_state);
 }
 
-fn update(app_state: &mut AppState, event: &Event) {
+fn update_app_state(app_state: &mut AppState, event: &Event) {
     match event {
         Event::Init => return,
         Event::Increment => app_state.count += 1,
@@ -36,6 +36,46 @@ fn update(app_state: &mut AppState, event: &Event) {
     }
 }
 
-fn render(app_state: &AppState, label: Rc<RefCell<Label>>) {
-    label.borrow_mut().set_label(format!("Count: {:?}", app_state.count).as_str());
+fn update_gui_state(gui_state: Rc<RefCell<GuiState>>, app_state: Rc<RefCell<AppState>>) {
+    let mut gui = gui_state.borrow_mut();
+    let state = app_state.borrow();
+
+    match &mut *gui {
+        GuiState::Uninitialised { main_window } => {
+            let label = build_label(&format!("Count: {}", state.count));
+            let button_inc = build_button("+");
+            let button_dec = build_button("-");
+
+            let container = build_layout();
+            container.append(&label);
+            container.append(&button_inc);
+            container.append(&button_dec);
+
+            button_inc.connect_clicked({
+                let state = app_state.clone();
+                let gui = gui_state.clone();
+                move |_| {
+                    dispatch(gui.clone(), state.clone(), Event::Increment);
+                }
+            });
+
+            button_dec.connect_clicked({
+                let state = app_state.clone();
+                let gui = gui_state.clone();
+                move |_| {
+                    dispatch(gui.clone(), state.clone(), Event::Decrement);
+                }
+            });
+
+            main_window.set_child(Some(&container));
+            main_window.present();
+
+            *gui = GuiState::Initialised {
+                count_label: label,
+            }
+        }
+        GuiState::Initialised { count_label, .. } => {
+            count_label.set_label(&format!("Count: {}", state.count));
+        }
+    }
 }
