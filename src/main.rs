@@ -15,6 +15,14 @@ fn main() -> glib::ExitCode {
     app.run()
 }
 
+fn build_button<T: Into<glib::GString>>(label: T) -> Button {
+    Button::builder()
+        .label(label)
+        .margin_start(12)
+        .margin_end(12)
+        .build()
+}
+
 fn build_ui(app: &Application) {
     let app_state = Rc::new(RefCell::new(AppState::new()));
 
@@ -26,17 +34,8 @@ fn build_ui(app: &Application) {
         .margin_end(12)
         .build();
 
-    let button_inc = Button::builder()
-        .label("+")
-        .margin_start(12)
-        .margin_end(12)
-        .build();
-
-    let button_dec = Button::builder()
-        .label("-")
-        .margin_start(12)
-        .margin_end(12)
-        .build();
+    let button_inc = build_button("+");
+    let button_dec = build_button("-");
 
     let container = gtk::Box::builder()
         .orientation(gtk::Orientation::Vertical)
