@@ -1,12 +1,11 @@
 mod app;
 mod gui;
 
+use crate::app::AppContext;
 use crate::gui::{build_main_window, GuiState};
-use app::{dispatch, AppState, Event};
+use app::Event;
 use gtk::prelude::{ApplicationExt, ApplicationExtManual};
 use gtk::{glib, Application};
-use std::cell::RefCell;
-use std::rc::Rc;
 
 fn main() -> glib::ExitCode {
     let app = Application::builder()
@@ -19,9 +18,7 @@ fn main() -> glib::ExitCode {
 
 fn build_ui(app: &Application) {
     let main_window = build_main_window(&app);
+    let context = AppContext::new(main_window);
 
-    let app_state = Rc::new(RefCell::new(AppState::new()));
-    let gui_state = Rc::new(RefCell::new(GuiState::new(main_window)));
-
-    dispatch(gui_state.clone(), app_state.clone(), Event::Init);
+    context.dispatch(Event::Init);
 }
