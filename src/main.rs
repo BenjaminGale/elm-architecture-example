@@ -3,7 +3,7 @@ mod gui;
 
 use crate::gui::{build_main_window, GuiState};
 use app::{dispatch, AppState, Event};
-use gtk::prelude::{ApplicationExt, ApplicationExtManual, BoxExt, ButtonExt, GtkWindowExt};
+use gtk::prelude::{ApplicationExt, ApplicationExtManual};
 use gtk::{glib, Application};
 use std::cell::RefCell;
 use std::rc::Rc;
