@@ -2,7 +2,7 @@ use gtk::{glib, Application};
 use gtk::prelude::{ApplicationExt, ApplicationExtManual};
 use crate::app::context::AppContext;
 use crate::app::event::Event;
-use crate::gui::build_main_window;
+use crate::gui::gui_state::build_main_window;
 
 mod app;
 mod gui;

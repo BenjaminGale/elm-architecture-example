@@ -3,7 +3,7 @@ use std::rc::Rc;
 use gtk::ApplicationWindow;
 use crate::app::event::Event;
 use crate::app::model::{update_model, AppModel};
-use crate::gui::{render, GuiState};
+use crate::gui::gui_state::{render, GuiState};
 
 pub struct AppContext {
     gui: Rc<RefCell<GuiState>>,
