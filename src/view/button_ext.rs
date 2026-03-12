@@ -3,14 +3,14 @@ use gtk::prelude::ButtonExt;
 use crate::app::context::AppContext;
 use crate::app::event::Event;
 
-pub trait ButtonExtensions {
+pub trait ButtonDispatcher {
     fn on_clicked<E, F>(&self, app_context: AppContext, event: F)
-        where
-            F: Fn() -> E + 'static,
-            E: Into<Event>;
+    where
+        F: Fn() -> E + 'static,
+        E: Into<Event>;
 }
 
-impl ButtonExtensions for Button {
+impl ButtonDispatcher for Button {
     fn on_clicked<E, F>(&self, app_context: AppContext, event: F)
         where
             F: Fn() -> E + 'static,
