@@ -16,8 +16,8 @@ impl CounterView {
         let increment_button = build_button("+");
         let decrement_button = build_button("-");
 
-        increment_button.on_button_clicked(app_context.clone(), CounterEvent::Increment);
-        decrement_button.on_button_clicked(app_context.clone(), CounterEvent::Decrement);
+        increment_button.on_clicked(app_context.clone(), || CounterEvent::Increment);
+        decrement_button.on_clicked(app_context.clone(), || CounterEvent::Decrement);
 
         let container = build_layout();
         container.append(&label);
