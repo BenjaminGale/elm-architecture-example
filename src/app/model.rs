@@ -1,4 +1,4 @@
-use crate::app::event::Event;
+use crate::app::event::{AppEvent, CounterEvent, Event};
 
 #[derive(Debug)]
 pub struct AppModel {
@@ -19,8 +19,8 @@ impl AppModel {
 
 pub fn update_model(model: &mut AppModel, event: &Event) {
     match event {
-        Event::Init => return,
-        Event::Increment => model.count += 1,
-        Event::Decrement => model.count -= 1,
+        Event::App(AppEvent::Init) => return,
+        Event::Counter(CounterEvent::Increment) => model.count += 1,
+        Event::Counter(CounterEvent::Decrement) => model.count -= 1,
     }
 }

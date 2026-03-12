@@ -17,8 +17,8 @@ impl AppContext {
         }
     }
 
-    pub fn dispatch(self: &Self, event: Event) {
-        update_model(&mut self.model.borrow_mut(), &event);
+    pub fn dispatch<T: Into<Event>>(self: &Self, event: T) {
+        update_model(&mut self.model.borrow_mut(), &event.into());
         self.gui.borrow_mut().render(&self.model.borrow(), self.clone());
     }
 }

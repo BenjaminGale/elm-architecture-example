@@ -1,9 +1,9 @@
-use gtk::{glib, Application};
-use gtk::prelude::{ApplicationExt, ApplicationExtManual};
 use crate::app::context::AppContext;
-use crate::app::event::Event;
+use crate::app::event::AppEvent;
 use crate::app::model::AppModel;
 use crate::gui::gui::AppGui;
+use gtk::prelude::{ApplicationExt, ApplicationExtManual};
+use gtk::{glib, Application};
 
 mod app;
 mod gui;
@@ -22,5 +22,5 @@ fn on_activate(app: &Application) {
     let gui = AppGui::new(app);
     let app_context = AppContext::new(model, gui);
 
-    app_context.dispatch(Event::Init);
+    app_context.dispatch(AppEvent::Init);
 }
