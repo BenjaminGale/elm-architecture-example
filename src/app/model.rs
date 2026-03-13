@@ -1,4 +1,4 @@
-use crate::app::event::{AppEvent, CounterEvent, Event};
+use crate::app::message::{AppMsg, CounterMsg, Msg};
 
 #[derive(Debug)]
 pub struct AppModel {
@@ -12,17 +12,17 @@ impl AppModel {
         }
     }
 
-    pub fn update(self: &mut Self, event: &Event) {
+    pub fn update(self: &mut Self, event: &Msg) {
         match event {
-            Event::App(AppEvent::Init) => return,
-            Event::Counter(ev) => self.update_count(ev),
+            Msg::App(AppMsg::Init) => return,
+            Msg::Counter(ev) => self.update_count(ev),
         }
     }
 
-    fn update_count(self: &mut Self, event: &CounterEvent) {
+    fn update_count(self: &mut Self, event: &CounterMsg) {
         match event {
-            CounterEvent::Increment => self.count += 1,
-            CounterEvent::Decrement => self.count -= 1,
+            CounterMsg::Increment => self.count += 1,
+            CounterMsg::Decrement => self.count -= 1,
         }
     }
 

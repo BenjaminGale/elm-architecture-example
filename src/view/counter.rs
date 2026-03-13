@@ -1,5 +1,5 @@
 use crate::app::context::AppContext;
-use crate::app::event::CounterEvent;
+use crate::app::message::CounterMsg;
 use crate::app::model::AppModel;
 use gtk::prelude::BoxExt;
 use gtk::{glib, Align, Button, Label};
@@ -17,8 +17,8 @@ impl CounterView {
         let inc_button = build_button("+");
         let dec_button = build_button("-");
 
-        inc_button.on_clicked(app_context.clone(), || CounterEvent::Increment);
-        dec_button.on_clicked(app_context.clone(), || CounterEvent::Decrement);
+        inc_button.on_clicked(app_context.clone(), || CounterMsg::Increment);
+        dec_button.on_clicked(app_context.clone(), || CounterMsg::Decrement);
 
         let container = build_layout();
         container.append(&label);

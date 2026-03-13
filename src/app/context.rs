@@ -1,4 +1,4 @@
-use crate::app::event::{AppEvent, Event};
+use crate::app::message::{AppMsg, Msg};
 use crate::app::model::{AppModel};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -19,11 +19,11 @@ impl AppContext {
     }
 
     pub fn show_main_window(self: &Self) {
-        self.dispatch(AppEvent::Init);
+        self.dispatch(AppMsg::Init);
         self.view.borrow().show();
     }
 
-    pub fn dispatch<T: Into<Event>>(self: &Self, event: T) {
+    pub fn dispatch<T: Into<Msg>>(self: &Self, event: T) {
         self.model.borrow_mut().update(&event.into());
         self.view.borrow_mut().render(&self.model.borrow(), self.clone());
     }
