@@ -23,8 +23,25 @@ impl AppContext {
         self.view.borrow().show();
     }
 
-    pub fn dispatch<T: Into<Msg>>(self: &Self, event: T) {
+    fn dispatch<T: Into<Msg>>(self: &Self, event: T) {
         self.model.borrow_mut().update(&event.into());
-        self.view.borrow_mut().render(&self.model.borrow(), self);
+        self.view.borrow_mut().render(&self.model.borrow(), &Dispatcher::new(self));
+    }
+}
+
+#[derive(Clone)]
+pub struct Dispatcher<> {
+    app_context: AppContext
+}
+
+impl Dispatcher {
+    pub fn new(app_context: &AppContext) -> Dispatcher {
+        Dispatcher {
+            app_context: app_context.clone()
+        }
+    }
+
+    pub fn dispatch<E: Into<Msg>>(self: &Self, event: E) {
+        self.app_context.dispatch(event);
     }
 }

@@ -1,24 +1,24 @@
-use gtk::Button;
-use gtk::prelude::ButtonExt;
-use crate::app::context::AppContext;
+use crate::app::context::Dispatcher;
 use crate::app::message::Msg;
+use gtk::prelude::ButtonExt;
+use gtk::Button;
 
 pub trait ButtonDispatcher {
-    fn on_clicked<E, F>(&self, app_context: &AppContext, event: F)
+    fn on_clicked<E, F>(&self, dispatcher: &Dispatcher, event: F)
     where
         F: Fn() -> E + 'static,
         E: Into<Msg>;
 }
 
 impl ButtonDispatcher for Button {
-    fn on_clicked<E, F>(&self, app_context: &AppContext, event: F)
+    fn on_clicked<E, F>(&self, dispatcher: &Dispatcher, event: F)
         where
             F: Fn() -> E + 'static,
             E: Into<Msg>
     {
-        let ctx = app_context.clone();
+        let d = dispatcher.clone();
         self.connect_clicked(move |_| {
-            ctx.dispatch(event().into());
+            d.dispatch(event().into());
         });
     }
 }

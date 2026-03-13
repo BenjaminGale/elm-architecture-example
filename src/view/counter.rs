@@ -1,9 +1,9 @@
-use crate::app::context::AppContext;
+use crate::app::context::Dispatcher;
 use crate::app::message::CounterMsg;
 use crate::app::model::AppModel;
+use crate::view::button_ext::ButtonDispatcher;
 use gtk::prelude::BoxExt;
 use gtk::{glib, Align, Button, Label};
-use crate::view::button_ext::ButtonDispatcher;
 
 pub struct CounterView {
     pub root: gtk::Box,
@@ -11,14 +11,14 @@ pub struct CounterView {
 }
 
 impl CounterView {
-    pub fn new(model: &AppModel, app_context: &AppContext) -> CounterView {
+    pub fn new(model: &AppModel, dispatcher: &Dispatcher) -> CounterView {
         let label = build_label(&model.format_count());
 
         let inc_button = build_button("+");
         let dec_button = build_button("-");
 
-        inc_button.on_clicked(app_context, || CounterMsg::Increment);
-        dec_button.on_clicked(app_context, || CounterMsg::Decrement);
+        inc_button.on_clicked(dispatcher, || CounterMsg::Increment);
+        dec_button.on_clicked(dispatcher, || CounterMsg::Decrement);
 
         let container = build_layout();
         container.append(&label);

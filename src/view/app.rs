@@ -1,8 +1,8 @@
-use gtk::{Application, ApplicationWindow};
-use gtk::prelude::GtkWindowExt;
-use crate::app::context::AppContext;
+use crate::app::context::Dispatcher;
 use crate::app::model::AppModel;
 use crate::view::counter::CounterView;
+use gtk::prelude::GtkWindowExt;
+use gtk::{Application, ApplicationWindow};
 
 pub struct AppView {
     main_window: ApplicationWindow,
@@ -21,16 +21,16 @@ impl AppView {
         self.main_window.present();
     }
 
-    fn add_counter_view(self: &mut Self, model: &AppModel, app_context: &AppContext) {
-        let view = CounterView::new(model, app_context);
+    fn add_counter_view(self: &mut Self, model: &AppModel, dispatcher: &Dispatcher) {
+        let view = CounterView::new(model, dispatcher);
 
         self.main_window.set_child(Some(&view.root));
         self.counter_view = Some(view);
     }
 
-    pub fn render(self: &mut Self, model: &AppModel, app_context: &AppContext) {
+    pub fn render(self: &mut Self, model: &AppModel, dispatcher: &Dispatcher) {
         match &mut self.counter_view {
-            None => self.add_counter_view(model, app_context),
+            None => self.add_counter_view(model, dispatcher),
             Some(view)  => view.render(model)
         }
     }
