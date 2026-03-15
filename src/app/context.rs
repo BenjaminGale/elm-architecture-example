@@ -23,10 +23,8 @@ impl AppContext {
     }
 
     fn dispatch<T: Into<Msg>>(self: &Self, msg: T) {
-        let msg = msg.into();
-
-        self.model.borrow_mut().update(&msg);
-        self.view.borrow_mut().render(&self.model.borrow(), &msg,  &self.dispatcher());
+        self.model.borrow_mut().update(&msg.into());
+        self.view.borrow_mut().render(&self.model.borrow(), &self.dispatcher());
     }
 }
 

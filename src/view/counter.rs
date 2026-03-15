@@ -4,35 +4,41 @@ use crate::app::model::AppModel;
 use crate::view::button_ext::ButtonDispatcher;
 use gtk::prelude::BoxExt;
 use gtk::{glib, Align, Button, Label};
+use crate::view::view::LazyView;
 
 pub struct CounterView {
     pub root: gtk::Box,
     label: Label,
 }
 
-impl CounterView {
-    pub fn new(model: &AppModel, dispatcher: &Dispatcher) -> CounterView {
-        let label = build_label(&model.format_count());
+impl LazyView<CounterView> for Option<CounterView> {
+    fn render(&mut self, model: &AppModel, dispatcher: &Dispatcher) {
+        match self {
+            None => {
+                let label = build_label(&model.format_count());
 
-        let inc_button = build_button("+");
-        let dec_button = build_button("-");
+                let inc_button = build_button("+");
+                let dec_button = build_button("-");
 
-        inc_button.on_clicked(dispatcher, || CounterMsg::Increment);
-        dec_button.on_clicked(dispatcher, || CounterMsg::Decrement);
+                inc_button.on_clicked(dispatcher, || CounterMsg::Increment);
+                dec_button.on_clicked(dispatcher, || CounterMsg::Decrement);
 
-        let container = build_layout();
-        container.append(&label);
-        container.append(&inc_button);
-        container.append(&dec_button);
+                let container = build_layout();
+                container.append(&label);
+                container.append(&inc_button);
+                container.append(&dec_button);
 
-        CounterView {
-            root: container,
-            label
+                let counter_view = CounterView {
+                    root: container,
+                    label
+                };
+
+                *self = Some(counter_view)
+            },
+            Some(view) => {
+                view.label.set_label(&model.format_count());
+            }
         }
-    }
-
-    pub fn render(self: &mut Self, model: &AppModel) {
-        self.label.set_label(&model.format_count());
     }
 }
 
