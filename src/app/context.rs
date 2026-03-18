@@ -29,7 +29,7 @@ impl AppContext {
 }
 
 #[derive(Clone)]
-pub struct Dispatcher<> {
+pub struct Dispatcher {
     app_context: AppContext
 }
 
